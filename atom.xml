@@ -75,6 +75,32 @@
   </entry>
   
   <entry>
+    <title>图解UML</title>
+    <link href="https://blog.yuifly.top/2024/02/08/%E5%9B%BE%E8%A7%A3UML/"/>
+    <id>https://blog.yuifly.top/2024/02/08/%E5%9B%BE%E8%A7%A3UML/</id>
+    <published>2024-02-07T16:00:00.000Z</published>
+    <updated>2024-02-07T16:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="图解UML"><a href="#图解UML" class="headerlink" title="图解UML"></a>图解UML</h1><img src="/2024/02/08/%E5%9B%BE%E8%A7%A3UML/uml.png" class="" title="uml"><ol><li><p>泛化（Generalization）</p><blockquote><p>泛化是一种继承关系，表示一般与特殊的关系，它指一个更通用类（父类）与一个更特定类（子类）之间的关系。在Java代码中，这通常表现为类继承。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class Bird extends Animal &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>实现（Implementation）</p><blockquote><p>实现关系是类与接口之间的关系，表示类实现接口中的方法。在Java中，这通常表现为类实现接口。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class Bird implements Fly &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>组合（Composition）</p><blockquote><p>组合表示一种强“整体-部分”关联关系，其中部分（成员）不能脱离整体存在。在Java代码中，这通常表现为成员变量，并且该成员变量的生命周期完全由整体类管理。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    private Wing wing;</span><br><span class="line"></span><br><span class="line">    Bird() &#123;</span><br><span class="line">        this.wing &#x3D; new Wing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>聚合（Aggregation）</p><blockquote><p>聚合是关联的一种特殊形式，它表示“整体-部分”的关系，但与组合不同，部分（成员）可以脱离整体独立存在。聚合通常用于表示拥有关系。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    private List&lt;Feather&gt; feathers;</span><br><span class="line"></span><br><span class="line">    Bird(List&lt;Feather&gt; feathers) &#123;</span><br><span class="line">        this.feathers &#x3D; feathers;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>关联（Association）</p><blockquote><p>关联是两个独立对象之间的一种链接，它们在逻辑上彼此连接，但是生命周期相互独立。关联可以是双向的，也可以是单向的。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    private Nest nest; &#x2F;&#x2F; 单向关联</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Nest &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>依赖（Dependency）</p><blockquote><p>依赖表示一个类依赖于另一个类的定义。通常，这意味着一个类的方法操纵另一个类的对象。在Java代码中，这通常表现为局部变量、方法的参数或者静态方法的调用。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    void migrate(South south) &#123;</span><br><span class="line">        &#x2F;&#x2F; 方法内部依赖South类</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;图解UML&quot;&gt;&lt;a href=&quot;#图解UML&quot; class=&quot;headerlink&quot; title=&quot;图解UML&quot;&gt;&lt;/a&gt;图解UML&lt;/h1&gt;&lt;img src=&quot;/2024/02/08/%E5%9B%BE%E8%A7%A3UML/uml.png&quot; class=&quot;&quot;</summary>
+      
+    
+    
+    
+    <category term="Developer" scheme="https://blog.yuifly.top/categories/Developer/"/>
+    
+    <category term="Doc" scheme="https://blog.yuifly.top/categories/Developer/Doc/"/>
+    
+    
+    <category term="UML" scheme="https://blog.yuifly.top/tags/UML/"/>
+    
+  </entry>
+  
+  <entry>
     <title>使用Windows11神器WSL打造独一无二的开发环境</title>
     <link href="https://blog.yuifly.top/2024/02/08/%E4%BD%BF%E7%94%A8Windows11%E7%A5%9E%E5%99%A8WSL%E6%89%93%E9%80%A0%E7%8B%AC%E4%B8%80%E6%97%A0%E4%BA%8C%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
     <id>https://blog.yuifly.top/2024/02/08/%E4%BD%BF%E7%94%A8Windows11%E7%A5%9E%E5%99%A8WSL%E6%89%93%E9%80%A0%E7%8B%AC%E4%B8%80%E6%97%A0%E4%BA%8C%E7%9A%84%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</id>
@@ -105,32 +131,6 @@
   </entry>
   
   <entry>
-    <title>图解UML</title>
-    <link href="https://blog.yuifly.top/2024/02/08/%E5%9B%BE%E8%A7%A3UML/"/>
-    <id>https://blog.yuifly.top/2024/02/08/%E5%9B%BE%E8%A7%A3UML/</id>
-    <published>2024-02-07T16:00:00.000Z</published>
-    <updated>2024-02-07T16:00:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="图解UML"><a href="#图解UML" class="headerlink" title="图解UML"></a>图解UML</h1><img src="/2024/02/08/%E5%9B%BE%E8%A7%A3UML/uml.png" class="" title="uml"><ol><li><p>泛化（Generalization）</p><blockquote><p>泛化是一种继承关系，表示一般与特殊的关系，它指一个更通用类（父类）与一个更特定类（子类）之间的关系。在Java代码中，这通常表现为类继承。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class Bird extends Animal &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>实现（Implementation）</p><blockquote><p>实现关系是类与接口之间的关系，表示类实现接口中的方法。在Java中，这通常表现为类实现接口。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class Bird implements Fly &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>组合（Composition）</p><blockquote><p>组合表示一种强“整体-部分”关联关系，其中部分（成员）不能脱离整体存在。在Java代码中，这通常表现为成员变量，并且该成员变量的生命周期完全由整体类管理。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    private Wing wing;</span><br><span class="line"></span><br><span class="line">    Bird() &#123;</span><br><span class="line">        this.wing &#x3D; new Wing();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>聚合（Aggregation）</p><blockquote><p>聚合是关联的一种特殊形式，它表示“整体-部分”的关系，但与组合不同，部分（成员）可以脱离整体独立存在。聚合通常用于表示拥有关系。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    private List&lt;Feather&gt; feathers;</span><br><span class="line"></span><br><span class="line">    Bird(List&lt;Feather&gt; feathers) &#123;</span><br><span class="line">        this.feathers &#x3D; feathers;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>关联（Association）</p><blockquote><p>关联是两个独立对象之间的一种链接，它们在逻辑上彼此连接，但是生命周期相互独立。关联可以是双向的，也可以是单向的。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    private Nest nest; &#x2F;&#x2F; 单向关联</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Nest &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>依赖（Dependency）</p><blockquote><p>依赖表示一个类依赖于另一个类的定义。通常，这意味着一个类的方法操纵另一个类的对象。在Java代码中，这通常表现为局部变量、方法的参数或者静态方法的调用。</p></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Bird &#123;</span><br><span class="line">    void migrate(South south) &#123;</span><br><span class="line">        &#x2F;&#x2F; 方法内部依赖South类</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;图解UML&quot;&gt;&lt;a href=&quot;#图解UML&quot; class=&quot;headerlink&quot; title=&quot;图解UML&quot;&gt;&lt;/a&gt;图解UML&lt;/h1&gt;&lt;img src=&quot;/2024/02/08/%E5%9B%BE%E8%A7%A3UML/uml.png&quot; class=&quot;&quot;</summary>
-      
-    
-    
-    
-    <category term="Developer" scheme="https://blog.yuifly.top/categories/Developer/"/>
-    
-    <category term="Doc" scheme="https://blog.yuifly.top/categories/Developer/Doc/"/>
-    
-    
-    <category term="UML" scheme="https://blog.yuifly.top/tags/UML/"/>
-    
-  </entry>
-  
-  <entry>
     <title>计算机网络的繁花</title>
     <link href="https://blog.yuifly.top/2024/02/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%B9%81%E8%8A%B1/"/>
     <id>https://blog.yuifly.top/2024/02/07/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%9A%84%E7%B9%81%E8%8A%B1/</id>
@@ -157,26 +157,6 @@
     <category term="MAC" scheme="https://blog.yuifly.top/tags/MAC/"/>
     
     <category term="IP" scheme="https://blog.yuifly.top/tags/IP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="https://blog.yuifly.top/2024/01/04/hello-world/"/>
-    <id>https://blog.yuifly.top/2024/01/04/hello-world/</id>
-    <published>2024-01-04T06:55:22.533Z</published>
-    <updated>2024-01-04T06:55:22.533Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.</summary>
-      
-    
-    
-    
     
   </entry>
   
