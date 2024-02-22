@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>Java 性能分析和线上监控-Arthas | yui&#39;s blog | 人类的悲欢并不相通</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Arthas,Java">
+    <meta name="description" content="Java 性能分析和线上监控-Arthas什么是Arthas  Arthas 是一款线上监控诊断产品，通过全局视角实时查看应用 load、内存、gc、线程的状态信息，并能在不修改应用代码的情况下，对业务问题进行诊断，包括查看方法调用的出入参、异常，监测方法执行耗时，类加载信息等，大大提升线上问题排查效率。  总结来说就是可以查看、修改运行中的 Java 应用。 什么时候需要 Arthas 了解当前">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 性能分析和线上监控-Arthas">
+<meta property="og:url" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/index.html">
+<meta property="og:site_name" content="yui&#39;s blog">
+<meta property="og:description" content="Java 性能分析和线上监控-Arthas什么是Arthas  Arthas 是一款线上监控诊断产品，通过全局视角实时查看应用 load、内存、gc、线程的状态信息，并能在不修改应用代码的情况下，对业务问题进行诊断，包括查看方法调用的出入参、异常，监测方法执行耗时，类加载信息等，大大提升线上问题排查效率。  总结来说就是可以查看、修改运行中的 Java 应用。 什么时候需要 Arthas 了解当前">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/5da4ace0-b2ab-4c02-8016-399c3d49ffd4.png">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/a3bd6415-bf98-45f6-ba9d-32a022c5eb9a.png">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/bfd9adae-0f83-4e3d-87f4-4bb095e089f8.png">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/1507b117-5ee4-4b76-8276-c679a94cfd51.png">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/6f59749c-9009-4ee3-a094-a41d46e1faea.png">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/b688692c-b6c7-4220-9e42-49d3c3912a35.png">
+<meta property="og:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/b894c914-f304-41ea-892e-a36bbc8990c8.png">
+<meta property="article:published_time" content="2024-02-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-02-08T16:00:00.000Z">
+<meta property="article:author" content="yui">
+<meta property="article:tag" content="Arthas">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/5da4ace0-b2ab-4c02-8016-399c3d49ffd4.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="yui&#39;s blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">yui</h5>
+          <a href="mailto:trysingtime@gmail.com" title="trysingtime@gmail.com" class="mail">trysingtime@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/trysingtime" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java 性能分析和线上监控-Arthas</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java 性能分析和线上监控-Arthas</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2024-02-08T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2024-02-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Developer/">Developer</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Developer/Tool/">Tool</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java-性能分析和线上监控-Arthas"><span class="post-toc-number">1.</span> <span class="post-toc-text">Java 性能分析和线上监控-Arthas</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#什么是Arthas"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">什么是Arthas</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#什么时候需要-Arthas"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">什么时候需要 Arthas</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Arthas-常用命令小结"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Arthas 常用命令小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Arthas-常用命令示例"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">Arthas 常用命令示例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#最佳实践"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">最佳实践</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-Java 性能分析和线上监控-Arthas"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java 性能分析和线上监控-Arthas</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2024-02-09 00:00:00" datetime="2024-02-08T16:00:00.000Z"  itemprop="datePublished">2024-02-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Developer/">Developer</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Developer/Tool/">Tool</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Java-性能分析和线上监控-Arthas"><a href="#Java-性能分析和线上监控-Arthas" class="headerlink" title="Java 性能分析和线上监控-Arthas"></a>Java 性能分析和线上监控-Arthas</h1><h2 id="什么是Arthas"><a href="#什么是Arthas" class="headerlink" title="什么是Arthas"></a>什么是Arthas</h2><blockquote>
+<p> Arthas 是一款线上监控诊断产品，通过全局视角实时查看应用 load、内存、gc、线程的状态信息，并能在不修改应用代码的情况下，对业务问题进行诊断，包括查看方法调用的出入参、异常，监测方法执行耗时，类加载信息等，大大提升线上问题排查效率。</p>
+</blockquote>
+<p>总结来说就是可以查看、修改运行中的 Java 应用。</p>
+<h2 id="什么时候需要-Arthas"><a href="#什么时候需要-Arthas" class="headerlink" title="什么时候需要 Arthas"></a>什么时候需要 Arthas</h2><ol>
+<li><p>了解当前 Java 应用的性能</p>
+</li>
+<li><p>查看当前 Java 应用的瓶颈</p>
+</li>
+<li><p>监控 JVM 的运行状态</p>
+</li>
+<li><p>线上修改日志</p>
+</li>
+<li><p>测试环境直接修改代码</p>
+</li>
+<li><p>定位应用热点，生成火焰图</p>
+</li>
+</ol>
+<h2 id="Arthas-常用命令小结"><a href="#Arthas-常用命令小结" class="headerlink" title="Arthas 常用命令小结"></a>Arthas 常用命令小结</h2><ol>
+<li><p>help - 查看支持哪些指令</p>
+</li>
+<li><p>memory - 查看 JVM 内存信息</p>
+</li>
+<li><p>thread - 查看线程 CPU 使用率</p>
+</li>
+<li><p>cls - 清空当前屏幕</p>
+</li>
+<li><p>logger - 查看并修改日志信息</p>
+</li>
+<li><p>stack - 查看方法的调用栈</p>
+</li>
+<li><p>watch - 查看方法的调用情况包括参数和返回值</p>
+</li>
+<li><p>tract - 查看方法的调用栈运行时间</p>
+</li>
+<li><p>monitor - 统计一段时间内的方法的调用次数、平均运行时间、成功&#x2F;失败次数</p>
+</li>
+<li><p>tt - watch的升级版，支持先把方法调用全记录下来，后续再排查</p>
+</li>
+<li><p>profiler - 生成火焰图</p>
+</li>
+<li><p>sc&#x2F;sm&#x2F;jad&#x2F;mc&#x2F;redefine - 线上查找并修改class</p>
+</li>
+</ol>
+<h2 id="Arthas-常用命令示例"><a href="#Arthas-常用命令示例" class="headerlink" title="Arthas 常用命令示例"></a>Arthas 常用命令示例</h2><ol>
+<li><p>查看方法的调用栈(-n 2 表示查看两次)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stack com.yjt.ccb.controller.ExchangeController invoke -n 2</span><br></pre></td></tr></table></figure>
+
+   <img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/5da4ace0-b2ab-4c02-8016-399c3d49ffd4.png" class="" title="5da4ace0-b2ab-4c02-8016-399c3d49ffd4">
+
+
+</li>
+<li><p>查看方法的参数和返回值(-x 3 表示调用栈深度)</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch com.yjt.ccb.controller.ExchangeController invoke &#39;&#123;params,returnObj,throwExp&#125;&#39;  -n 2  -x 3</span><br></pre></td></tr></table></figure>
+
+
+
+<img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/a3bd6415-bf98-45f6-ba9d-32a022c5eb9a.png" class="" title="a3bd6415-bf98-45f6-ba9d-32a022c5eb9a">
+
+
+
+<ol start="3">
+<li><p>查看方法栈运行时间(–skipJDKMethod false 表示包含 JDK 的调用栈)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trace com.yjt.ccb.controller.ExchangeController invoke  -n 2 --skipJDKMethod false</span><br></pre></td></tr></table></figure>
+
+<img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/bfd9adae-0f83-4e3d-87f4-4bb095e089f8.png" class="" title="bfd9adae-0f83-4e3d-87f4-4bb095e089f8">
+
+
+</li>
+<li><p>统计方法运行平均用时(–cycle 10 表示10秒一次)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">monitor com.yjt.ccb.controller.ExchangeController invoke  -n 10  --cycle 10</span><br></pre></td></tr></table></figure>
+
+<img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/1507b117-5ee4-4b76-8276-c679a94cfd51.png" class="" title="1507b117-5ee4-4b76-8276-c679a94cfd51">
+
+
+</li>
+<li><p>查看 JVM 内存信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">memory</span><br></pre></td></tr></table></figure>
+
+<img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/6f59749c-9009-4ee3-a094-a41d46e1faea.png" class="" title="6f59749c-9009-4ee3-a094-a41d46e1faea"></li>
+</ol>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ol>
+<li>使用插件自动生成指令</li>
+</ol>
+<p>为了使 Arthas 更易用，我们可以使用 IDEA 的插件 - <a href="https://plugins.jetbrains.com/plugin/13581-arthas-idea" target="_blank" rel="noopener">arthas idea - IntelliJ IDEs Plugin | Marketplace</a></p>
+<p>安装后，我们在需要使用 Arthas 命令的方法上右键就能看到 Arthas 菜单，可以根据需要自动生成上述各种 Arthas 的指令。</p>
+<img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/b688692c-b6c7-4220-9e42-49d3c3912a35.png" class="" title="b688692c-b6c7-4220-9e42-49d3c3912a35">
+
+
+
+<ol start="2">
+<li><p>在 Springboot 中集成 Arthas<br>在 Spring 应用中集成 Arthas，应用启动时，Arthas 也会跟着启动，同时也启动了 Arthas Console， 其实就是网页版。</p>
+<ul>
+<li><p>配置 maven 依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.taobao.arthas&lt;&#x2F;groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;arthas-spring-boot-starter&lt;&#x2F;artifactId&gt;</span><br><span class="line">    &lt;version&gt;$&#123;arthas.version&#125;&lt;&#x2F;version&gt;</span><br><span class="line">&lt;&#x2F;dependency&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>配置 springboot</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring.arthas.enabled&#x3D;true</span><br><span class="line">arthas.ip&#x3D;0.0.0.0</span><br><span class="line">arthas.telnet-port&#x3D;13658</span><br><span class="line">arthas.http-port&#x3D;18563</span><br><span class="line">arthas.username&#x3D;arthas</span><br><span class="line">arthas.password&#x3D;arthas</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>网页控制台使用</li>
+</ul>
+<p>打开网页 <a href="http://localhost:18563/" target="_blank" rel="noopener">http://localhost:18563</a></p>
+</li>
+</ul>
+</li>
+</ol>
+<img src="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/b894c914-f304-41ea-892e-a36bbc8990c8.png" class="" title="b894c914-f304-41ea-892e-a36bbc8990c8">
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2024-02-08T16:00:00.000Z" itemprop="dateUpdated">2024-02-09 00:00:00</time>
+</span><br>
+
+
+        
+        感谢您的阅读 <a href="/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/" target="_blank" rel="external">https://blog.yuifly.top/2024/02/09/Java%20%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E7%BA%BF%E4%B8%8A%E7%9B%91%E6%8E%A7-Arthas/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://blog.yuifly.top">
+            <img src="/img/avatar.jpg" alt="yui">
+            yui
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Arthas/" rel="tag">Arthas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+
+            
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2024/02/09/%E7%99%BD%E5%AB%96GPT4%20Turbo%20128K/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">白嫖GPT4 Turbo 128K</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>yui &copy; 2015 - 2024</span>
+            <span>
+                
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: false, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '离开...';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '阅读中...';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
